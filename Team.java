@@ -61,7 +61,6 @@ public class Team{
 
 	//get all of the possible moves for the entire team. Uses the movelist linked list.
 	public MoveList getMoves(Board currentBoard){
-		System.out.println("Printing moves for " + type + " team");
 		PieceNode temp = start;
 		MoveList possibleMoves = new MoveList();
 		while(temp != null){

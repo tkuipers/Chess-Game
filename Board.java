@@ -7,7 +7,7 @@ public class Board{
 		board =new Piece[8][8];
 		white = new Team("White");
 		black = new Team("Black");
-		addPawns();
+		// addPawns();
 		addCastles();
 		addKnights();
 		addBishops();
@@ -168,6 +168,21 @@ public class Board{
 		}
 		return score;
 	}
+	//returns the king for this board.
+	public Piece getKing(Team team){
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(board[i][j] != null){
+					if(board[i][j].getType() == 'K'){
+						if(board[i][j].getTeam() == team.type.toCharArray()[0]){
+							return board[i][j];
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 	//used for printing the board to the console.
 	public String toString(){
 		String out = " +----+----+----+----+----+----+----+----+\n";
@@ -186,9 +201,27 @@ public class Board{
 		}
 		out +="  A    B    C    D    E    F    G    H   \n";
 		out += "White has: " + white.getValue() + "\nBlack has: " + black.getValue() + "\nThe value of this board is: " + getScore();
-		// out += "\n" + board[6][2].getPossibleMoves(this);
+		out += "\n" + check(white) + "    " + check(black);
 
 		return out;
+	}
+	public boolean check(Team inTeam){
+		Team checkTeam = null;
+		if(inTeam == black){
+			checkTeam = white;
+		}
+		else{
+			checkTeam = black;
+		}
+		MoveList checkList = checkTeam.getMoves(this);
+		MoveNode tempNode = checkList.start;
+		while(tempNode != null){
+			if(getKing(inTeam).getPosition().getColumns() == tempNode.move.getPosition().getColumns() && getKing(inTeam).getPosition().getRows() == tempNode.move.getPosition().getRows()){
+				return true;
+			}
+			tempNode = tempNode.getNext();
+		}
+		return false;
 	}
 
 }

@@ -21,6 +21,9 @@ abstract class Piece{
 	public String toString(){
 		return "" + team + type;
 	}
+	public char getType(){
+		return type;
+	}
 	//Return the value of the piece
 	public int getValue(){
 		if(team == 'B'){
