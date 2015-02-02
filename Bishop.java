@@ -1,4 +1,4 @@
-//Bishop Class.  Extends Piece
+//Bishop Class.  Extends Piece.  A
 public class Bishop extends Piece{
 	public Bishop(char team, Position position){
 		super(team, position, 'B', 30);
