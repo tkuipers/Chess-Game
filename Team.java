@@ -7,6 +7,37 @@ public class Team{
 		type = teamname;
 		start = null;
 	}
+	public String getType(){
+		return type;
+	}
+	public Team(Team inTeam, Board inBoard){
+		start = null;
+		type = new String(inTeam.type);
+		PieceNode tempNode = inTeam.start;
+		PieceNode prevNode = null;
+		PieceNode newNode = null;
+		while(tempNode != null){
+			newNode = new PieceNode(tempNode, inBoard);
+			this.addNode(newNode);
+			if(prevNode != null){
+				prevNode.setNext(newNode);
+			}
+			prevNode = tempNode;
+			tempNode = tempNode.getNext();
+		}
+	}
+	public void addNode(PieceNode newPieceNode){
+		if(start == null){
+			start = newPieceNode;
+		}
+		else{
+			PieceNode curNode = start;
+			while(curNode.getNext() != null){
+				curNode = curNode.getNext();
+			}
+			curNode.setNext(newPieceNode);
+		}
+	}
 	//add a piece to the team
 	public void addPiece(Piece newPiece){
 		if(start == null){
@@ -19,7 +50,6 @@ public class Team{
 			}
 			PieceNode out = new PieceNode(newPiece);
 			curNode.setNext(out);
-			out.setPrev(curNode);
 		}
 	}
 	//remove a piece from the linked list.
@@ -34,15 +64,8 @@ public class Team{
 			}
 		}
 		while(temp.getNext() != null){
-			temp = temp.getNext();
-			if(temp.piece == deadPiece){
-				if(temp.getNext() != null){
-					temp.getPrev().setNext(temp.getNext());
-					temp.getNext().setPrev(temp.getPrev());
-				}
-				else{
-					temp.getPrev().setNext(null);
-				}
+			if(temp.getNext().piece == deadPiece){
+				temp.setNext(temp.getNext().getNext());
 				break;
 			}
 		}

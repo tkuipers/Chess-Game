@@ -8,12 +8,56 @@ public class Board{
 		white = new Team("White");
 		black = new Team("Black");
 		// addPawns();
-		addCastles();
-		addKnights();
+		// addCastles();
+		// addKnights();
 		addBishops();
 		addQueens();
 		addKings();
+		// addSpecialPawns();
 		System.out.println(this);
+
+		// System.out.println(checkMate(white, this));
+	}
+	//Copy Constructor
+	public Board(Board inBoard){
+		this.board = new Piece[8][8];
+		this.white = new Team(inBoard.getWhite(), this);
+		this.black = new Team(inBoard.getBlack(), this);
+
+	}
+	public Board(Board inBoard, Move inMove){
+		this.board = new Piece[8][8];
+		this.white = new Team(inBoard.getWhite(), this);
+		this.black = new Team(inBoard.getBlack(), this);
+		// if(validateMove(inMove)){
+			movePiece(inMove);
+		// }
+
+	}
+	public boolean validateMove(Move inMove){
+		//grab team
+		//check whether it is in the available moves
+		//return true or false based on that.
+		Team curTeam;
+		if(inMove.getPiece().getTeam() == 'W'){
+			curTeam = white;
+		}
+		else{
+			curTeam = black;
+		}
+		if(curTeam.getMoves(this).validate(inMove)){
+			return true;
+		}
+		else{
+			return false;
+		}
+
+	}
+	public Team getWhite(){
+		return white;
+	}
+	public Team getBlack(){
+		return black;
 	}
 	//Returns the board for use in other functions
 	public Piece[][] getCurrentBoard(){
@@ -35,12 +79,22 @@ public class Board{
 	}
 	//Used for testing the heuristic and the pawn progression policy
 	public void addSpecialPawns(){
-		Pawn tempBlack = new Pawn('B', new Position(4,7));
-		board[4][7] = tempBlack;
+		Pawn tempBlack = new Pawn('B', new Position(6,3));
+		board[6][3] = tempBlack;
 		black.addPiece(tempBlack);
-		Pawn tempWhite = new Pawn('W', new Position(3,7));
-		board[3][7] = tempWhite;
-		white.addPiece(tempWhite);
+		// System.out.println(tempBlack.getPossibleMoves(this));
+		tempBlack = new Pawn('B', new Position(6,5));
+		board[6][5] = tempBlack;
+		black.addPiece(tempBlack);
+		tempBlack = new Pawn('B', new Position(5,4));
+		board[5][4] = tempBlack;
+		black.addPiece(tempBlack);
+		tempBlack = new Pawn('B', new Position(5,3));
+		board[5][3] = tempBlack;
+		black.addPiece(tempBlack);
+		// Pawn tempWhite = new Pawn('W', new Position(3,7));
+		// board[3][7] = tempWhite;
+		// white.addPiece(tempWhite);
 	}
 	//Moves the piece while updating everything pertinent
 	public void movePiece(Move inMove){
@@ -201,7 +255,10 @@ public class Board{
 		}
 		out +="  A    B    C    D    E    F    G    H   \n";
 		out += "White has: " + white.getValue() + "\nBlack has: " + black.getValue() + "\nThe value of this board is: " + getScore();
-		out += "\n" + check(white) + "    " + check(black);
+		// out += "\nWhite Team\n" + white;
+		out += "\n" + "White is in check: " + check(white) + "\nBlack is in Check: " + check(black);
+		out += "\n" + "White is in checkmate: " + checkMate(white, this) + "\nBlack is in Checkmate: " + checkMate(black, this);
+		// out += black.getMoves(this);
 
 		return out;
 	}
@@ -214,9 +271,51 @@ public class Board{
 			checkTeam = black;
 		}
 		MoveList checkList = checkTeam.getMoves(this);
-		MoveNode tempNode = checkList.start;
+		Position kingPosition = getKing(inTeam).getPosition();
+		// checkPosition(kingPosition, checkList);
+		return checkPosition(kingPosition, checkList);
+	}
+	public boolean checkMate(Team inTeam, Board curBoard){
+		// System.out.println("Currently printing out the Currentest of boards.");
+		// System.out.println(curBoard);
+		boolean checkMate = true;
+		Team checkTeam = null;
+		if(inTeam == black){
+			checkTeam = white;
+		}
+		else{
+			checkTeam = black;
+		}
+		// System.out.println("the current team we are checking is "+ checkTeam.type);
+		MoveList checkList = checkTeam.getMoves(curBoard);
+		Position kingPosition = getKing(inTeam).getPosition();
+		MoveList kingMoves = getKing(inTeam).getPossibleMoves(curBoard);
+		MoveNode tempNode = kingMoves.start;
 		while(tempNode != null){
-			if(getKing(inTeam).getPosition().getColumns() == tempNode.move.getPosition().getColumns() && getKing(inTeam).getPosition().getRows() == tempNode.move.getPosition().getRows()){
+			Board tempBoard = new Board(curBoard, tempNode.move);
+			if(inTeam.getType().equals("white")){
+				if(!(tempBoard.check(tempBoard.getWhite()))){
+					checkMate = false;
+					break;
+				}
+			}
+			else{
+				if(!(tempBoard.check(tempBoard.getBlack()))){
+					checkMate = false;
+					break;
+				}
+			}
+			tempNode = tempNode.getNext();
+		}
+		// System.out.println("Currently Printing The CurBoard");
+		// System.out.println(curBoard);
+		return checkMate;
+	}
+	private boolean checkPosition(Position kingPosition, MoveList possibleOtherTeamMoves){
+		MoveNode tempNode = possibleOtherTeamMoves.start;
+		while(tempNode != null){
+			if(kingPosition.getColumns() == tempNode.move.getPosition().getColumns() && kingPosition.getRows() == tempNode.move.getPosition().getRows()){
+				// System.out.println("This move is causing the check to trip: " + tempNode.move);
 				return true;
 			}
 			tempNode = tempNode.getNext();

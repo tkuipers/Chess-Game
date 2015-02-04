@@ -37,6 +37,16 @@ public class MoveList{
 			start = inMoveList.start;
 		}
 	}
+	public boolean validate(Move inMove){
+		MoveNode tempNode = start;
+		while(tempNode != null){
+			if(tempNode.equals(inMove)){
+				return true;
+			}
+			tempNode = tempNode.getNext();
+		}
+		return false;
+	}
 	//Print all of the moves in the list
 	public String toString(){
 		MoveNode moveTemp = start;

@@ -4,6 +4,9 @@ public class Queen extends Piece{
 	public Queen(char team, Position position){
 		super(team, position, 'Q', 90);
 	}
+	public Queen(Piece inPiece, Board inBoard){
+		super(inPiece, inBoard);
+	}
 	public boolean move(){
 		return true;
 	}

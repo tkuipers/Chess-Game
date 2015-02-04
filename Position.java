@@ -7,6 +7,10 @@ public class Position{
 		this.row = row;
 		this.column = column;
 	}
+	public Position(Position inPosition){
+		this.row = inPosition.getRows();
+		this.column = inPosition.getColumns();
+	}
 	public void setRow(int row){
 		this.row=row;
 	}
@@ -21,5 +25,11 @@ public class Position{
 	}
 	public String toString(){
 		return "Row: " + row+1 + " Column " + column+1;
+	}
+	public boolean equals(Position inPosition){
+		if(this.row == inPosition.getRows() && this.column == inPosition.getColumns()){
+			return true;
+		}
+		return false;
 	}
 }

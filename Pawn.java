@@ -3,6 +3,9 @@ public class Pawn extends Piece{
 	public Pawn(char team, Position position){
 		super(team, position, 'P', 10);
 	}
+	public Pawn(Piece inPiece, Board inBoard){
+		super(inPiece, inBoard);
+	}
 	public boolean move(){
 		return true;
 	}
@@ -25,7 +28,9 @@ public class Pawn extends Piece{
 		}
 		// System.out.println("Debating: " + (new Move(forward, this, curPosition)) + ": " + (inBoard.validate(new Move(forward, this, curPosition))));
 		if(inBoard.validate(new Move(forward, this, curPosition))){
-			outMove.addMove(new Move(forward, this, curPosition));
+			if(inBoard.getCurrentBoard()[forward.getRows()][forward.getColumns()] == null){
+				outMove.addMove(new Move(forward, this, curPosition));
+			}
 		}
 		// System.out.println("Debating: " + (new Move(frontRight, this, curPosition)) + ": " + (inBoard.validate(new Move(frontRight, this, curPosition))));
 		if(inBoard.validate(new Move(frontRight, this, curPosition)) && inBoard.getCurrentBoard()[frontRight.getRows()][frontRight.getColumns()] != null){

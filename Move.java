@@ -22,4 +22,10 @@ public class Move{
 		return (((char)((int)'A'+oldPosition.getColumns())) + (8-oldPosition.getRows() + " to " + ((char)((int)'A'+position.getColumns())) + (8-position.getRows())));
 		// return null;
 	}
+	public boolean equals(Move inMove){
+		if(this.position.equals(inMove.getPosition()) && this.oldPosition.equals(inMove.getOldPosition()) && this.piece.equals(inMove.getPiece())){
+			return true;
+		}
+		return false;
+	}
 }

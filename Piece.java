@@ -13,6 +13,23 @@ abstract class Piece{
 		this.type = type;
 		this.value = value;
 	}
+	public Piece(Piece inPiece, Board inBoard){
+		this.team = inPiece.getTeam();
+		this.position = new Position(inPiece.getPosition());
+		this.type = inPiece.getType();
+		this.value = inPiece.getBaseValue();
+		inBoard.getCurrentBoard()[position.getRows()][position.getColumns()] = this;
+	}
+	public boolean equals(Piece inPiece){
+		if(this.team == inPiece.getTeam() && this.position.equals(inPiece.getPosition()) && this.type == inPiece.getType() && this.value  == inPiece.getValue()){
+			return true;
+		}
+		return false;
+
+	}
+	public int getBaseValue(){
+		return value;
+	}
 	//Return teams
 	public char getTeam(){
 		return team;

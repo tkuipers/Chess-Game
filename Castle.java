@@ -3,6 +3,9 @@ public class Castle extends Piece{
 	public Castle(char team, Position position){
 		super(team, position, 'R', 50);
 	}
+	public Castle(Piece inPiece, Board inBoard){
+		super(inPiece, inBoard);
+	}
 	public boolean move(){
 		return true;
 	}

@@ -3,6 +3,9 @@ public class King extends Piece{
 	public King(char team, Position position){
 		super(team, position, 'K', 1000);
 	}
+	public King(Piece inPiece, Board inBoard){
+		super(inPiece, inBoard);
+	}
 	public boolean move(){
 		return true;
 	}

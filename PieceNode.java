@@ -2,22 +2,35 @@
 public class PieceNode{
 	public Piece piece;
 	private PieceNode next;
-	private PieceNode prev;
 	public PieceNode(Piece piece){
 		this.next = null;
 		this.piece = piece;
-		this.prev = null;
+	}
+	public PieceNode(PieceNode pieceNode, Board inBoard){
+		char type = pieceNode.piece.getType();
+		if(type == 'B'){
+			piece = new Bishop(pieceNode.piece, inBoard);
+		}
+		else if(type == 'R'){
+			piece = new Castle(pieceNode.piece, inBoard);
+		}
+		else if(type == 'K'){
+			piece = new King(pieceNode.piece, inBoard);
+		}
+		else if(type == 'Q'){
+			piece = new Queen(pieceNode.piece, inBoard);
+		}
+		else if(type == 'P'){
+			piece = new Pawn(pieceNode.piece, inBoard);
+		}
+		else if(type == 'N'){
+			piece = new Knight(pieceNode.piece, inBoard);
+		}
 	}
 	public void setNext(PieceNode next){
 		this.next = next;
 	}
-	public void setPrev(PieceNode prev){
-		this.prev = prev;
-	}
 	public PieceNode getNext(){
 		return next;
-	}
-	public PieceNode getPrev(){
-		return prev;
 	}
 }

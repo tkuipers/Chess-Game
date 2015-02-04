@@ -3,6 +3,9 @@ public class Knight extends Piece{
 	public Knight(char team, Position position){
 		super(team, position, 'N', 30);
 	}
+	public Knight(Piece inPiece, Board inBoard){
+		super(inPiece, inBoard);
+	}
 	public boolean move(){
 		return true;
 	}

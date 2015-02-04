@@ -3,6 +3,9 @@ public class Bishop extends Piece{
 	public Bishop(char team, Position position){
 		super(team, position, 'B', 30);
 	}
+	public Bishop(Piece inPiece, Board inBoard){
+		super(inPiece, inBoard);
+	}
 	public boolean move(){
 		return true;
 	}
