@@ -40,7 +40,9 @@ public class MoveList{
 	public boolean validate(Move inMove){
 		MoveNode tempNode = start;
 		while(tempNode != null){
-			if(tempNode.equals(inMove)){
+			// System.out.println("Checking move: "+ tempNode.move);
+			if(tempNode.move.equals(inMove)){
+				// System.out.println("Returning true");
 				return true;
 			}
 			tempNode = tempNode.getNext();

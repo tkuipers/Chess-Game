@@ -12,4 +12,11 @@ public class MoveNode{
 	public MoveNode getNext(){
 		return next;
 	}
+	public boolean equals(MoveNode in){
+		if(this.move.equals(in.move)){
+			System.out.println("Got here");
+			return true;
+		}
+		return false;
+	}
 }
