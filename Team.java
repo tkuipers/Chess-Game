@@ -54,20 +54,20 @@ public class Team{
 	}
 	//remove a piece from the linked list.
 	public void deletePiece(Piece deadPiece){
+		PieceNode prevPiece = null;
 		PieceNode temp = start;
-		if(deadPiece == temp.piece){
-			if(temp.getNext() == null){
-				temp = null;
-			}
-			else{
-				temp = temp.getNext();
-			}
-		}
-		while(temp.getNext() != null){
-			if(temp.getNext().piece == deadPiece){
-				temp.setNext(temp.getNext().getNext());
+		while(temp != null){
+			if(deadPiece == temp.piece){
+				if(prevPiece != null){
+					prevPiece.setNext(temp.getNext());
+				}
+				else{
+					start = temp.getNext();
+				}
 				break;
 			}
+			prevPiece = temp;
+			temp = temp.getNext();
 		}
 	}
 	//return the value of the team

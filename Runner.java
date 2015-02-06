@@ -2,16 +2,32 @@ import java.util.*;
 public class Runner{
 	public static void main(String args[]){
 		Board chessBoard = new Board();
-		while(chessBoard.gameOver() == null){
+		int a = 10;
+		while(a==10){
 			System.out.println(chessBoard);
-			Board tempBoard = promptUser("Enter A Move", chessBoard, chessBoard.getBlack());
-			chessBoard = tempBoard;
+			chessBoard = promptUser("Enter A Move", chessBoard, chessBoard.getWhite());
+			if(chessBoard == null){
+				// break;
+			}
+			if(chessBoard.gameOver() != null){
+				// break;
+			}
+			System.out.println(chessBoard);
+			chessBoard = promptUser("Enter A Move", chessBoard, chessBoard.getBlack());
+			if(chessBoard == null){
+				// break;
+			}
 		}
-		if(chessBoard.gameOver() == chessBoard.getBlack()){
-			System.out.println("Black Wins");
+		if(chessBoard != null){
+			if(chessBoard.gameOver() == chessBoard.getBlack()){
+				System.out.println("Black Wins");
+			}
+			else if(chessBoard.gameOver() == chessBoard.getWhite()){
+				System.out.println("White wins");
+			}
 		}
-		else if(chessBoard.gameOver() == chessBoard.getWhite()){
-			System.out.println("White wins");
+		else{
+			System.out.println("error");
 		}
 		
 	}
@@ -20,7 +36,10 @@ public class Runner{
 		System.out.println(in);
 		String out = scantron.next();
 		Move move = toMove(out, board);
-		Board outBoard = new Board(board, move, curTeam);
+		Board outBoard = null;
+		if(move != null){
+			outBoard = new Board(board, move, curTeam);
+		}
 		return outBoard;
 		// System.out.println();
 	}
@@ -31,10 +50,23 @@ public class Runner{
 			int firstRow = letterToNum(moveParse[1]);
 			int secondCol = letterToNum(moveParse[2]);
 			int secondRow = letterToNum(moveParse[3]);
+			if(firstCol == -1|| secondCol == -1|| firstRow == -1|| secondRow == -1){
+				return null;
+			}
 			Position oldPos = new Position(firstRow, firstCol);
 			Position newPos = new Position(secondRow, secondCol);
 			Piece curPiece = board.getCurrentBoard()[firstRow][firstCol];
 			return new Move(newPos, curPiece, oldPos);
+		}
+		if(move.length() == 2){
+			char[] moveParse = move.toUpperCase().toCharArray();
+			int firstCol  = letterToNum(moveParse[0]); 
+			int firstRow = letterToNum(moveParse[1]);
+			System.out.println(board.getCurrentBoard()[firstRow][firstCol].getPossibleMoves(board));
+			Position oldPos = new Position(firstRow, firstCol);
+			Piece curPiece = board.getCurrentBoard()[firstRow][firstCol];
+			return new Move(oldPos, curPiece, oldPos);
+			// return null;
 		}
 		else{
 			System.out.println("Not a valid move.  The format is L5N6.");

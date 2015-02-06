@@ -26,15 +26,16 @@ public class Board{
 
 	}
 	public Board(Board inBoard, Move inMove){
-		inBoard.movePiece(inMove, null);
 		this.board = new Piece[8][8];
 		this.white = new Team(inBoard.getWhite(), this);
 		this.black = new Team(inBoard.getBlack(), this);
+		inBoard.movePiece(inMove, null);
 		// System.out.println(inBoard);
 		// System.out.println("Cloning this board");
 
 	}
 	public Board(Board inBoard, Move inMove, Team curTeam){
+		System.out.println(inMove.getPiece().getPossibleMoves(inBoard));
 		inBoard.movePiece(inMove, curTeam);
 		this.board = new Piece[8][8];
 		this.white = new Team(inBoard.getWhite(), this);
@@ -218,8 +219,12 @@ public class Board{
 		if(inMove.getPosition().getRows() >= 8 || inMove.getPosition().getRows() < 0){
 			return false;
 		}
-		if(this.getCurrentBoard()[inMove.getPosition().getRows()][inMove.getPosition().getColumns()] != null && this.getCurrentBoard()[inMove.getPosition().getRows()][inMove.getPosition().getColumns()].getTeam() == inMove.getPiece().getTeam()){
-			return false;
+		if(this.getCurrentBoard()[inMove.getPosition().getRows()][inMove.getPosition().getColumns()] != null){
+			if(this.getCurrentBoard()[inMove.getPosition().getRows()][inMove.getPosition().getColumns()].getTeam() == inMove.getPiece().getTeam()){
+				// System.out.println("Got here");
+				return false;
+			}
+			// return false;
 		}
 		return true;
 	}
@@ -289,26 +294,28 @@ public class Board{
 		return checkPosition(kingPosition, checkList);
 	}
 	public boolean checkMate(Team inTeam, Board curBoard){
-		// System.out.println("Currently printing out the Currentest of boards.");
-		// System.out.println(curBoard);
 		if(!check(inTeam)){
 			return false;
 		}
 		boolean checkMate = true;
 		Team checkTeam = null;
+		Team curTeam = null;
 		if(inTeam == black){
 			checkTeam = white;
+			curTeam = new Team(black, this);
+
 		}
 		else{
 			checkTeam = black;
+			curTeam = new Team(white, this);
 		}
-		// System.out.println("the current team we are checking is "+ checkTeam.type);
 		MoveList checkList = checkTeam.getMoves(curBoard);
-		// Position kingPosition = getKing(inTeam).getPosition();
-		// MoveList kingMoves = getKing(inTeam).getPossibleMoves(curBoard);
-		MoveNode tempNode = inTeam.getMoves(curBoard).start;
+		MoveList kingMoves = getKing(inTeam).getPossibleMoves(curBoard);
+		MoveNode tempNode = inTeam.getMoves(this).start;;
 		while(tempNode != null){
-			Board tempBoard = new Board(curBoard, tempNode.move);
+			Board tempBoard = new Board(curBoard, tempNode.move, curTeam);
+			// Board tempTempBoard = new Board(tempBoard, tempNode.move, tempBoard)
+			System.out.println(tempBoard);
 			if(inTeam.getType().equals("white")){
 				if(!(tempBoard.check(tempBoard.getWhite()))){
 					checkMate = false;
@@ -340,9 +347,13 @@ public class Board{
 	}
 	public Team gameOver(){
 		if (checkMate(white, this)){
+			System.out.println("White is in checkmate");
 			return black;
 		}
 		else if(checkMate(black, this)){
+			System.out.println("Black is in checkmate");
+			// System.out.println(black);
+			System.out.println(black.getMoves(this));
 			return white;
 		}
 		return null;
