@@ -1,8 +1,8 @@
 import java.util.*;
 public class Runner{
 	public static void main(String args[]){
-		Player white = new AIPlayer('W');
-		Player black = new AIPlayer('B');
+		Player white = new AIPlayer('W', 6);
+		Player black = new AIPlayer('B', 4);
 		Board chessBoard = new Board();
 		int a = 10;
 		while(a==10){

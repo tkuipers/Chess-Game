@@ -2,12 +2,14 @@ import java.lang.Thread;
 import java.util.Timer;
 import java.util.*;
 public class AIPlayer extends Player{
-	public AIPlayer(char teamType){
+	private int difficulty;
+	public AIPlayer(char teamType, int difficulty){
 		super(teamType);
+		this.difficulty = difficulty;
 	}
 	public Board promptUser(Board board){
 		Board outBoard = null;
-		int difficulty = 6;
+		// int difficulty = 6;
 		outBoard = getBestBoard(board, super.getTeam(), difficulty);
 		return outBoard;
 		// System.out.println();
