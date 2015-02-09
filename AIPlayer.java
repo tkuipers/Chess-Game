@@ -48,7 +48,7 @@ public class AIPlayer extends Player{
 			else{
 				value = 1400;
 				int moveScore = getBestMoveWhite(tempBoard, inDifficulty,1, -1400, 1400);
-				// System.out.println(tempNode.move + " with a value of " + moveScore);
+				System.out.println(tempNode.move + " with a value of " + moveScore);
 				// System.out.println()
 				if(moveScore < curHigh){
 					bestMove = tempNode.move;
@@ -82,7 +82,7 @@ public class AIPlayer extends Player{
 			MoveNode tempNode = inBoard.getWhite().getMoves(inBoard).start;
 			while(tempNode != null){
 				Board tempBoard = new Board(inBoard, tempNode.move);
-				if(beta <= alpha){
+				if(beta < alpha){
 					tempNode = tempNode.getNext();
 					continue;
 				}
