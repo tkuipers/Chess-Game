@@ -30,7 +30,7 @@ public class AIPlayer extends Player{
 		int curHigh = 1400;
 
 		int value;
-		System.out.println("Starting Move: ");
+		// System.out.println("Starting Move: ");
 		long startTime = System.nanoTime();
 		while(tempNode != null){
 			Board tempBoard = null;
@@ -41,7 +41,7 @@ public class AIPlayer extends Player{
 				int moveScore = getBestMoveBlack(tempBoard, inDifficulty, 1, -1400, 1400);
 				// long endTime = System.nanoTime();
 				// System.out.println((endTime - startTime));
-				System.out.println(tempNode.move + " with a value of " + moveScore);
+				// System.out.println(tempNode.move + " with a value of " + moveScore);
 				if(moveScore >= curLow){
 					bestMove = tempNode.move;
 					curLow = moveScore;
@@ -50,7 +50,7 @@ public class AIPlayer extends Player{
 			else{
 				value = 1400;
 				int moveScore = getBestMoveWhite(tempBoard, inDifficulty,1, -1400, 1400);
-				System.out.println(tempNode.move + " with a value of " + moveScore);
+				// System.out.println(tempNode.move + " with a value of " + moveScore);
 				// System.out.println()
 				if(moveScore < curHigh){
 					bestMove = tempNode.move;

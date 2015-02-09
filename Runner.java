@@ -1,12 +1,20 @@
 import java.util.*;
 public class Runner{
 	public static void main(String args[]){
-		Player white = new AIPlayer('W', 6);
-		Player black = new AIPlayer('B', 4);
+		Player white = new AIPlayer('W', 4);
+		Player black = new AIPlayer('B', 2);
 		Board chessBoard = new Board();
-		int a = 10;
-		while(a==10){
-			// System.out.println("chessBoard Looks like: ");
+		// int a = 10;
+		int prevValue = 1400;
+		int counter = 0;
+		while(counter < 20){
+			if(chessBoard.getWinner() != prevValue){
+				prevValue = chessBoard.getWinner();
+				counter = 0;
+			}
+			else{
+				counter++;
+			}
 			System.out.println(chessBoard);
 			chessBoard = white.promptUser(chessBoard);
 			if(chessBoard == null){
@@ -21,6 +29,10 @@ public class Runner{
 			if(chessBoard == null){
 				break;
 			}
+		}
+		if(counter >= 20){
+			System.out.println("It Was a Draw");
+			System.exit(0);
 		}
 		if(chessBoard != null){
 			if(chessBoard.gameOver() == chessBoard.getBlack()){
