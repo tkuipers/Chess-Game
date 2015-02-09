@@ -22,7 +22,7 @@ public class Team{
 			if(prevNode != null){
 				prevNode.setNext(newNode);
 			}
-			prevNode = tempNode;
+			prevNode = newNode;
 			tempNode = tempNode.getNext();
 		}
 	}
@@ -54,10 +54,12 @@ public class Team{
 	}
 	//remove a piece from the linked list.
 	public void deletePiece(Piece deadPiece){
+		// System.out.println("DELETING: " + deadPiece);
 		PieceNode prevPiece = null;
 		PieceNode temp = start;
 		while(temp != null){
-			if(deadPiece == temp.piece){
+			if(deadPiece.equals(temp.piece)){
+				// System.out.println("Deleting: \n" + deadPiece);
 				if(prevPiece != null){
 					prevPiece.setNext(temp.getNext());
 				}
@@ -100,7 +102,7 @@ public class Team{
 		String out = "";
 		PieceNode temp = start;
 		while(temp != null){
-			out += temp.piece + "\n";
+			out += temp.piece +  " at " + temp.piece.getPosition() + "\n";
 			temp = temp.getNext();
 		}
 		return out;

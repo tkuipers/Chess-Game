@@ -1,3 +1,4 @@
+import java.util.*;
 //Used for storing all of the moves possible for a piece
 public class MoveList{
 	public MoveNode start;
@@ -65,5 +66,16 @@ public class MoveList{
 		}
 		// out += "Hit the null case in MoveList";
 		return out;
+	}
+	public Move getRandom(){
+		Random randomClass = new Random();
+		MoveNode tempMoveNode = start;
+		for(int i = 0; i < randomClass.nextInt(6); i++){
+			if(tempMoveNode.getNext() == null){
+				break;
+			}
+			tempMoveNode = tempMoveNode.getNext();
+		}
+		return tempMoveNode.move;
 	}
 }

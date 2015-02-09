@@ -33,4 +33,7 @@ public class PieceNode{
 	public PieceNode getNext(){
 		return next;
 	}
+	public boolean equals(PieceNode input){
+		return input.equals(this.piece);
+	}
 }

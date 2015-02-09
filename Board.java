@@ -2,6 +2,7 @@ public class Board{
 	private Piece[][] board;
 	private Team white;
 	private Team black;
+	private boolean moved;
 	//Create the board and add pieces.
 	public Board(){
 		board =new Piece[8][8];
@@ -13,6 +14,7 @@ public class Board{
 		addBishops();
 		addQueens();
 		addKings();
+		moved = false;
 		// addSpecialPawns();
 		// System.out.println(this);
 
@@ -23,26 +25,34 @@ public class Board{
 		this.board = new Piece[8][8];
 		this.white = new Team(inBoard.getWhite(), this);
 		this.black = new Team(inBoard.getBlack(), this);
+		// moved = inBoard.getMoved();
 
 	}
 	public Board(Board inBoard, Move inMove){
 		this.board = new Piece[8][8];
 		this.white = new Team(inBoard.getWhite(), this);
 		this.black = new Team(inBoard.getBlack(), this);
-		inBoard.movePiece(inMove, null);
-		// System.out.println(inBoard);
-		// System.out.println("Cloning this board");
+		try{
+			if(inMove.getPiece().getTeam() == 'W'){
+				Move usableMove = new Move(inMove, this);
+				this.movePiece(usableMove);	
+			}
+			else{
+				Move usableMove = new Move(inMove, this);
+				this.movePiece(usableMove);	
+			}
+		}
+		catch(java.lang.NullPointerException e){
+			System.out.println("Error in Board constructor: Board(Board inBoard, Move inMove)");
+			System.exit(0);
+		}
 
 	}
 	public Board(Board inBoard, Move inMove, Team curTeam){
-		System.out.println(inMove.getPiece().getPossibleMoves(inBoard));
-		inBoard.movePiece(inMove, curTeam);
+		inBoard.movePiece(new Move(inMove, this));
 		this.board = new Piece[8][8];
 		this.white = new Team(inBoard.getWhite(), this);
 		this.black = new Team(inBoard.getBlack(), this);
-		// System.out.println(inBoard);
-		// System.out.println("Cloning this board");
-
 	}
 	public boolean validateMove(Move inMove){
 		//grab team
@@ -92,7 +102,6 @@ public class Board{
 		Pawn tempBlack = new Pawn('B', new Position(6,3));
 		board[6][3] = tempBlack;
 		black.addPiece(tempBlack);
-		// System.out.println(tempBlack.getPossibleMoves(this));
 		tempBlack = new Pawn('B', new Position(6,5));
 		board[6][5] = tempBlack;
 		black.addPiece(tempBlack);
@@ -107,25 +116,26 @@ public class Board{
 		// white.addPiece(tempWhite);
 	}
 	//Moves the piece while updating everything pertinent
-	public void movePiece(Move inMove, Team curTeam){
-		if(validateMove(inMove)){
-			if(validate(inMove)){
-				if(curTeam.getMoves(this).validate(inMove)){
-					if(board[inMove.getPosition().getRows()][inMove.getPosition().getColumns()] != null){
-						if(board[inMove.getPosition().getRows()][inMove.getPosition().getColumns()].getTeam() == 'W'){
-							white.deletePiece(board[inMove.getPosition().getRows()][inMove.getPosition().getColumns()]);
-						}
-						else{
-							black.deletePiece(board[inMove.getPosition().getRows()][inMove.getPosition().getColumns()]);
-						}
+	public boolean movePiece(Move inMove){
+		Move usableMove = new Move(inMove, this);
+		if(validateMove(usableMove)){
+			if(validate (usableMove)){
+				if(board[usableMove.getPosition().getRows()][usableMove.getPosition().getColumns()] != null){
+					// System.out.println("GOT HERE");
+					if(board[usableMove.getPosition().getRows()][usableMove.getPosition().getColumns()].getTeam() == 'W'){
+						white.deletePiece(board[usableMove.getPosition().getRows()][usableMove.getPosition().getColumns()]);
 					}
-					board[inMove.getPosition().getRows()][inMove.getPosition().getColumns()] = inMove.getPiece();
-					board[inMove.getOldPosition().getRows()][inMove.getOldPosition().getColumns()] = null;
-					board[inMove.getPosition().getRows()][inMove.getPosition().getColumns()].setPosition(inMove.getPosition());
+					else{
+						black.deletePiece(board[usableMove.getPosition().getRows()][usableMove.getPosition().getColumns()]);
+					}
 				}
+				usableMove.getPiece().setPosition(usableMove.getPosition());
+				board[usableMove.getOldPosition().getRows()][usableMove.getOldPosition().getColumns()] = null;
+				board[usableMove.getPosition().getRows()][usableMove.getPosition().getColumns()] = usableMove.getPiece();
+				return true;
 			}
 		}
-
+		return false;
 	}
 	//removes the piece from the board and the team record
 	public void deletePiece(Piece inPiece){
@@ -272,10 +282,21 @@ public class Board{
 			out += " +----+----+----+----+----+----+----+----+\n";
 		}
 		out +="  A    B    C    D    E    F    G    H   \n";
-		// out += "White has: " + white.getValue() + "\nBlack has: " + black.getValue() + "\nThe value of this board is: " + getScore();
-		// out += "\nWhite Team\n" + white;
+		// out += "Possible Moves for white: \n" + white.getMoves(this);
+		// out += "Possible Moves for black: \n" +  black.getMoves(this);
+		out += "White has: " + white.getValue() + "\nBlack has: " + black.getValue() + "\nThe value of this board is: " + getScore();
+		// out += "\nWhite Teamt\n" + white;
 		// out += "\n" + "White is in check: " + check(white) + "\nBlack is in Check: " + check(black);
-		// out += "\n" + "White is in checkmate: " + checkMate(white, this) + "\nBlack is in Checkmate: " + checkMate(black, this);
+		// boolean whiteCheck = false;
+		// boolean blackCheck = false;
+		// if(checkMate(white, this).start == null){
+			// whiteCheck = true;
+		// }
+		// if(checkMate(black, this).start == null){
+			// blackCheck = true;
+		// }
+
+		// out += "\n" + "White is in checkmate: " + whiteCheck + "\nBlack is in Checkmate: " + blackCheck;
 		// out += black.getMoves(this);
 
 		return out;
@@ -293,46 +314,44 @@ public class Board{
 		// checkPosition(kingPosition, checkList);
 		return checkPosition(kingPosition, checkList);
 	}
-	public boolean checkMate(Team inTeam, Board curBoard){
-		if(!check(inTeam)){
-			return false;
-		}
-		boolean checkMate = true;
-		Team checkTeam = null;
+	public MoveList checkMate(Team inTeam, Board curBoard){
+		Board masterBoard = new Board(curBoard);
+		MoveList saveMoves = new MoveList();
+		boolean checkMate=true;
 		Team curTeam = null;
-		if(inTeam == black){
-			checkTeam = white;
-			curTeam = new Team(black, this);
-
+		char teamType = '\0';
+		if(inTeam.getType().equals("White")){
+			curTeam = black;
+			teamType = 'W';
 		}
 		else{
-			checkTeam = black;
-			curTeam = new Team(white, this);
+			curTeam = white;
+			teamType = 'B';
 		}
-		MoveList checkList = checkTeam.getMoves(curBoard);
-		MoveList kingMoves = getKing(inTeam).getPossibleMoves(curBoard);
-		MoveNode tempNode = inTeam.getMoves(this).start;;
+		if(!check(curTeam)){
+			return curTeam.getMoves(this);
+		}
+		MoveNode tempNode = curTeam.getMoves(this).start;
 		while(tempNode != null){
-			Board tempBoard = new Board(curBoard, tempNode.move, curTeam);
-			// Board tempTempBoard = new Board(tempBoard, tempNode.move, tempBoard)
-			System.out.println(tempBoard);
-			if(inTeam.getType().equals("white")){
-				if(!(tempBoard.check(tempBoard.getWhite()))){
-					checkMate = false;
-					break;
+			Board newBoard = new Board(this, tempNode.move);
+			if(teamType == 'W'){
+				//check if the new board has that king in check
+				if(!(newBoard.check(newBoard.getWhite()))){
+					saveMoves.addMove(tempNode.move);
 				}
+
 			}
 			else{
-				if(!(tempBoard.check(tempBoard.getBlack()))){
-					checkMate = false;
-					break;
+				//check if the new board has the black king in chack
+				if(!(newBoard.check(newBoard.getBlack()))){
+					saveMoves.addMove(tempNode.move);
 				}
 			}
 			tempNode = tempNode.getNext();
 		}
-		// System.out.println("Currently Printing The CurBoard");
-		// System.out.println(curBoard);
-		return checkMate;
+		return saveMoves;
+
+		
 	}
 	private boolean checkPosition(Position kingPosition, MoveList possibleOtherTeamMoves){
 		MoveNode tempNode = possibleOtherTeamMoves.start;
@@ -346,11 +365,11 @@ public class Board{
 		return false;
 	}
 	public Team gameOver(){
-		if (checkMate(white, this)){
+		if (checkMate(white, this) == null){
 			System.out.println("White is in checkmate");
 			return black;
 		}
-		else if(checkMate(black, this)){
+		else if(checkMate(black, this) == null){
 			System.out.println("Black is in checkmate");
 			// System.out.println(black);
 			System.out.println(black.getMoves(this));
@@ -358,5 +377,12 @@ public class Board{
 		}
 		return null;
 	}
+	public boolean getMoved(){
+		return moved;
+	}
+
+
+
+
 
 }

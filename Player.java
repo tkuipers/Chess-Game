@@ -1,6 +1,14 @@
 abstract class Player{
-	private Team myTeam;
-	// abstract Move move();
-	private Board currentBoard;
+	private char team;
+	public Player(char myTeam){
+		// System.out.println(myTeam);
+		this.team = myTeam;
+	}
+	public char getTeam(){
+		return team;
+	}
+	public abstract Board promptUser(Board board);
+	
+
 
 }

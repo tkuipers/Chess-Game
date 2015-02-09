@@ -16,20 +16,34 @@ public class Pawn extends Piece{
 		Position forward;
 		Position frontRight;
 		Position frontLeft;
+		Position doubleFront = null;
 		if(super.getTeam() == 'W'){
 			forward = new Position(curPosition.getRows() - 1, curPosition.getColumns() + 0);
 			frontRight = new Position(curPosition.getRows() - 1, curPosition.getColumns() + 1);
 			frontLeft = new Position(curPosition.getRows() - 1, curPosition.getColumns() - 1);
+			if(!super.getMoved()){
+				doubleFront = new Position(curPosition.getRows() - 2, curPosition.getColumns() + 0);
+			}
 		}
 		else{
 			forward = new Position(curPosition.getRows() + 1, curPosition.getColumns() + 0);
-				frontRight = new Position(curPosition.getRows() + 1, curPosition.getColumns() + 1);
+			frontRight = new Position(curPosition.getRows() + 1, curPosition.getColumns() + 1);
 			frontLeft = new Position(curPosition.getRows() + 1, curPosition.getColumns() - 1);
+			if(!super.getMoved()){
+				doubleFront = new Position(curPosition.getRows() + 2, curPosition.getColumns() + 0);
+			}
 		}
 		// System.out.println("Debating: " + (new Move(forward, this, curPosition)) + ": " + (inBoard.validate(new Move(forward, this, curPosition))));
 		if(inBoard.validate(new Move(forward, this, curPosition))){
 			if(inBoard.getCurrentBoard()[forward.getRows()][forward.getColumns()] == null){
 				outMove.addMove(new Move(forward, this, curPosition));
+			}
+		}
+		if(doubleFront != null){
+			if(inBoard.validate(new Move(doubleFront, this, curPosition))){
+				if(inBoard.getCurrentBoard()[doubleFront.getRows()][doubleFront.getColumns()] == null){
+					outMove.addMove(new Move(doubleFront, this, curPosition));
+				}
 			}
 		}
 		// System.out.println("Debating: " + (new Move(frontRight, this, curPosition)) + ": " + (inBoard.validate(new Move(frontRight, this, curPosition))));

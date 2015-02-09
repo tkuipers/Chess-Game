@@ -24,7 +24,7 @@ public class Position{
 		return column;
 	}
 	public String toString(){
-		return "Row: " + row+1 + " Column " + column+1;
+		return "" + ((char)((int)'A'+this.getColumns())) + (8-this.getRows() );
 	}
 	public boolean equals(Position inPosition){
 		if(this.row == inPosition.getRows() && this.column == inPosition.getColumns()){

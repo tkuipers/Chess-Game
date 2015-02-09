@@ -9,6 +9,11 @@ public class Move{
 		this.piece = piece;
 		this.oldPosition = oldPosition;
 	}
+	public Move(Move inMove, Board curBoard){
+		this.position = new Position(inMove.getPosition());
+		this.oldPosition = new Position(inMove.getOldPosition());
+		this.piece = curBoard.getCurrentBoard()[this.oldPosition.getRows()][this.oldPosition.getColumns()];
+	}
 	public Position getPosition(){
 		return position;
 	}
@@ -19,7 +24,7 @@ public class Move{
 		return oldPosition;
 	}
 	public String toString(){
-		return (((char)((int)'A'+oldPosition.getColumns())) + (8-oldPosition.getRows() + " to " + ((char)((int)'A'+position.getColumns())) + (8-position.getRows() ) ) + " with piece " + piece );
+		return oldPosition + " to " + position + " with piece " + piece ;
 		// return null;
 	}
 	public boolean equals(Move inMove){

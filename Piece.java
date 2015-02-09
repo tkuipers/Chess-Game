@@ -4,6 +4,7 @@ abstract class Piece{
 	private Position position;
 	private char type;
 	private int value;
+	private boolean movedOnce;
 
 	abstract boolean move();
 	abstract MoveList getPossibleMoves(Board inBoard);//Constructor
@@ -12,6 +13,7 @@ abstract class Piece{
 		this.position = position;
 		this.type = type;
 		this.value = value;
+		movedOnce = false;
 	}
 	public Piece(Piece inPiece, Board inBoard){
 		this.team = inPiece.getTeam();
@@ -19,13 +21,27 @@ abstract class Piece{
 		this.type = inPiece.getType();
 		this.value = inPiece.getBaseValue();
 		inBoard.getCurrentBoard()[position.getRows()][position.getColumns()] = this;
+		this.movedOnce = inPiece.getMoved();
 	}
 	public boolean equals(Piece inPiece){
-		if(this.team == inPiece.getTeam() && this.position.equals(inPiece.getPosition()) && this.type == inPiece.getType() && this.value  == inPiece.getValue()){
-			return true;
+		if(this.team == inPiece.getTeam()){
+			// System.out.println("The teams are equal");
+			if(this.position.equals(inPiece.getPosition())){ 
+				// System.out.println("The positions are equals");
+				if(this.type == inPiece.getType()){
+					// System.out.println("The types are equal");
+					// if(this.value  == inPiece.getValue()){
+						// System.out.println("I dont know why I am returning false");
+						return true;
+					// }
+				}
+			}
 		}
 		return false;
 
+	}
+	public boolean getMoved(){
+		return movedOnce;
 	}
 	public int getBaseValue(){
 		return value;
@@ -56,6 +72,7 @@ abstract class Piece{
 	}
 	//Set the new position
 	public void setPosition(Position inPos){
-		position = inPos;
+		position = new Position(inPos);
+		movedOnce = true;
 	}
 }
