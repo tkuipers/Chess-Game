@@ -4,15 +4,23 @@ public class HumanPlayer extends Player{
 		super(teamType);
 	}
 	public Board promptUser(Board board){
-		Scanner scantron = new Scanner(System.in);
-		System.out.println("Enter A move for the human to make.");
-		String out = scantron.next();
-		Move move = toMove(out, board);
 		Board outBoard = null;
-		Team outTeam = (super.getTeam() == 'W') ? board.getWhite() : board.getBlack();
-		if(move != null){
-			outBoard = new Board(board, move);
-			// System.out.println("The outBoard looks like: \n" + outBoard);
+		Move move = null;
+		while(move == null){
+			Scanner scantron = new Scanner(System.in);
+			System.out.println("Enter A move for the human to make.");
+			String out = scantron.next();
+			if(out.equals("quit")){
+				System.exit(0);
+			}
+			move = toMove(out, board);
+			Team outTeam = (super.getTeam() == 'W') ? board.getWhite() : board.getBlack();
+			if(move != null){
+				outBoard = new Board(board, move);
+				break;
+				// System.out.println("The outBoard looks like: \n" + outBoard);
+			}
+			System.out.println("Sorry, I didnt get that");
 		}
 		return outBoard;
 		// System.out.println();

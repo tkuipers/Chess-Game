@@ -1,13 +1,14 @@
 import java.util.*;
 public class Runner{
 	public static void main(String args[]){
-		Player white = new AIPlayer('W', 4);
-		Player black = new AIPlayer('B', 2);
+		Player white = new HumanPlayer('W');
+		Player black = new AIPlayer('B');
 		Board chessBoard = new Board();
+		int drawLimit = 5;
 		// int a = 10;
 		int prevValue = 1400;
 		int counter = 0;
-		while(counter < 20){
+		while(counter < drawLimit){
 			if(chessBoard.getWinner() != prevValue){
 				prevValue = chessBoard.getWinner();
 				counter = 0;
@@ -30,7 +31,7 @@ public class Runner{
 				break;
 			}
 		}
-		if(counter >= 20){
+		if(counter >= drawLimit){
 			System.out.println("It Was a Draw");
 			System.exit(0);
 		}

@@ -285,6 +285,7 @@ public class Board{
 		// out += "Possible Moves for white: \n" + white.getMoves(this);
 		// out += "Possible Moves for black: \n" +  black.getMoves(this);
 		// out += "White has: " + white.getValue() + "\nBlack has: " + black.getValue() + "\nThe value of this board is: " + getScore();
+		out += "The score is currently " + getWinner();
 		// out += "\nWhite Teamt\n" + white;
 		// out += "\n" + "White is in check: " + check(white) + "\nBlack is in Check: " + check(black);
 		// boolean whiteCheck = false;
@@ -310,14 +311,20 @@ public class Board{
 			checkTeam = black;
 		}
 		MoveList checkList = checkTeam.getMoves(this);
-		Position kingPosition = getKing(inTeam).getPosition();
+		Position kingPosition = null;
+		if(getKing(inTeam) != null){
+			kingPosition = getKing(inTeam).getPosition();
+		}
+		else{
+			return true;
+		}
 		// checkPosition(kingPosition, checkList);
 		return checkPosition(kingPosition, checkList);
 	}
-	public MoveList checkMate(Team inTeam, Board curBoard){
+	public boolean checkMate(Team inTeam, Board curBoard){
+		boolean checkMate = true;
 		Board masterBoard = new Board(curBoard);
 		MoveList saveMoves = new MoveList();
-		boolean checkMate=true;
 		Team curTeam = null;
 		char teamType = '\0';
 		if(inTeam.getType().equals("White")){
@@ -329,27 +336,29 @@ public class Board{
 			teamType = 'B';
 		}
 		if(!check(curTeam)){
-			return curTeam.getMoves(this);
+			return false;
 		}
 		MoveNode tempNode = curTeam.getMoves(this).start;
 		while(tempNode != null){
 			Board newBoard = new Board(this, tempNode.move);
 			if(teamType == 'W'){
 				//check if the new board has that king in check
-				if(!(newBoard.check(newBoard.getWhite()))){
-					saveMoves.addMove(tempNode.move);
+				if(!(newBoard.check(newBoard.getBlack()))){
+					checkMate = false;
+					break;
 				}
 
 			}
 			else{
 				//check if the new board has the black king in chack
-				if(!(newBoard.check(newBoard.getBlack()))){
-					saveMoves.addMove(tempNode.move);
+				if(!(newBoard.check(newBoard.getWhite()))){
+					checkMate = false;
+					break;
 				}
 			}
 			tempNode = tempNode.getNext();
 		}
-		return saveMoves;
+		return checkMate;
 
 		
 	}
@@ -362,14 +371,15 @@ public class Board{
 			}
 			tempNode = tempNode.getNext();
 		}
+		// System.out.println(this);
 		return false;
 	}
 	public Team gameOver(){
-		if (checkMate(white, this) == null){
+		if (checkMate(white, this)){
 			System.out.println("White is in checkmate");
 			return black;
 		}
-		else if(checkMate(black, this) == null){
+		else if(checkMate(black, this)){
 			System.out.println("Black is in checkmate");
 			// System.out.println(black);
 			System.out.println(black.getMoves(this));
