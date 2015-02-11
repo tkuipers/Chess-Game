@@ -285,7 +285,7 @@ public class Board{
 		// out += "Possible Moves for white: \n" + white.getMoves(this);
 		// out += "Possible Moves for black: \n" +  black.getMoves(this);
 		// out += "White has: " + white.getValue() + "\nBlack has: " + black.getValue() + "\nThe value of this board is: " + getScore();
-		out += "The score is currently " + getWinner();
+		// out += "The score is currently " + getWinner();
 		// out += "\nWhite Teamt\n" + white;
 		// out += "\n" + "White is in check: " + check(white) + "\nBlack is in Check: " + check(black);
 		// boolean whiteCheck = false;

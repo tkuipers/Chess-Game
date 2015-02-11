@@ -3,36 +3,37 @@ import java.util.Timer;
 import java.util.*;
 public class AIPlayer extends Player{
 	private int difficulty;
-	public AIPlayer(char teamType){
+	public AIPlayer(char teamType, int difficulty){
 		super(teamType);
 		this.difficulty = difficulty;
 	}
 	public Board promptUser(Board board){
 		Board outBoard = null;
-		int a = 10;
-		while(a==10){
-			Scanner scantron = new Scanner(System.in);
-			System.out.println("Enter the ply for the computer to use");
-			String out = scantron.next();
-			if(out.equals("quit")){
-				System.exit(0);
-			}
-			else if(out.equals("2")){
-				outBoard = getBestBoard(board, super.getTeam(), 2);
-				break;
-			}
-			else if(out.equals("4")){
-				outBoard = getBestBoard(board, super.getTeam(), 4);
-				break;
-			}
-			else if(out.equals("6")){
-				outBoard = getBestBoard(board, super.getTeam(), 6);
-				break;
-			}
-			else{
-				System.out.println("Sorry, I didnt get that");
-			}
-		}
+		outBoard = getBestBoard(board, super.getTeam(), difficulty);
+		// int a = 10;
+		// while(a==10){
+			// Scanner scantron = new Scanner(System.in);
+			// System.out.println("Enter the ply for the computer to use");
+			// String out = scantron.next();
+			// if(out.equals("quit")){
+				// System.exit(0);
+			// }
+			// else if(out.equals("2")){
+				// outBoard = getBestBoard(board, super.getTeam(), 2);
+				// break;
+			// }
+			// else if(out.equals("4")){
+				// outBoard = getBestBoard(board, super.getTeam(), 4);
+				// break;
+			// }
+			// else if(out.equals("6")){
+				// outBoard = getBestBoard(board, super.getTeam(), 6);
+				// break;
+			// }
+			// else{
+				// System.out.println("Sorry, I didnt get that");
+			// }
+		// }
 		// int difficulty = 6;
 		// outBoard = getBestBoard(board, super.getTeam(), difficulty);
 		return outBoard;
@@ -63,7 +64,7 @@ public class AIPlayer extends Player{
 				value = -1400;
 				int moveScore = getBestMoveBlack(tempBoard, inDifficulty, 1, -1400, 1400);
 				if(inDifficulty > 4){
-					System.out.println(tempNode.move + " with a value of " + moveScore);
+					// System.out.println(tempNode.move + " with a value of " + moveScore);
 				}
 				if(moveScore >= curLow){
 					bestMove = tempNode.move;
@@ -74,7 +75,7 @@ public class AIPlayer extends Player{
 				value = 1400;
 				int moveScore = getBestMoveWhite(tempBoard, inDifficulty,1, -1400, 1400);
 				if(inDifficulty > 4){
-					System.out.println(tempNode.move + " with a value of " + moveScore);
+					// System.out.println(tempNode.move + " with a value of " + moveScore);
 				}
 				if(moveScore < curHigh){
 					bestMove = tempNode.move;
@@ -91,7 +92,7 @@ public class AIPlayer extends Player{
 		else{
 			System.out.println("Move took " + seconds / 60 + " minutes");
 		}
-		System.out.println("Doing move " + bestMove);
+		// System.out.println("Doing move " + bestMove);
 		masterBoard.movePiece(bestMove);
 		try{
 			// Thread.sleep(1000);
